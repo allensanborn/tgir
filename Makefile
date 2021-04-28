@@ -31,10 +31,35 @@ $(DOCKER) $(COMPOSE):
 else
 DOCKER ?= /usr/bin/docker
 $(DOCKER):
-	$(error Please install docker: https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+	# https://docs.docker.com/engine/install/ubuntu/
+	sudo apt-get update
+	sudo apt-get install \
+		apt-transport-https \
+		ca-certificates \
+		curl \
+		gnupg \
+		lsb-release
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+	#https://docs.docker.com/engine/install/ubuntu/
+	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+	sudo apt-get update
+	sudo apt-get install docker-ce docker-ce-cli containerd.io
+	
+	#https://docs.docker.com/engine/install/linux-postinstall/
+	sudo groupadd docker
+	sudo usermod -aG docker $USER
+	newgrp docker
+	
+	#auto start the docker service
+	echo "sudo service docker start" >> ~/.profile
+
 COMPOSE ?= $(DOCKER)-compose
 $(COMPOSE):
-	$(error Please install docker-compose: https://docs.docker.com/compose/install/)
+	#$(error Please install docker-compose: https://docs.docker.com/compose/install/)
+	sudo curl -sSL https://github.com/docker/compose/releases/download/`curl -s https://github.com/docker/compose/tags | \
+grep "compose/releases/tag" | sed -r 's|.*([0-9]+\.[0-9]+\.[0-9]+).*|\1|p' | head -n 1`/docker-compose-`uname -s`-`uname -m` \
+-o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
 endif
 
 ifeq ($(PLATFORM),Darwin)
@@ -67,6 +92,17 @@ else
 GCLOUD ?= /usr/bin/gcloud
 $(GCLOUD):
 	$(error Please install gcloud: https://cloud.google.com/sdk/docs/downloads-apt-get)
+endif
+
+KIND ?= /usr/local/bin/kind
+ifeq ($(PLATFORM),Darwin)
+	# Not implemented
+	$(error Please install kind)
+else
+$(KIND): $(DOCKER)
+	curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.10.0/kind-linux-amd64
+	chmod +x ./kind
+	sudo mv ./kind /usr/local/bin/kind
 endif
 
 ifeq ($(PLATFORM),Darwin)
