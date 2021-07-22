@@ -118,7 +118,7 @@ endif
 bat: $(BAT)
 
 K9S_RELEASES := https://github.com/derailed/k9s/releases
-K9S_VERSION := 0.24.2
+K9S_VERSION := 0.24.14
 K9S_BIN_DIR := k9s-$(K9S_VERSION)-$(platform)-x86_64
 K9S_URL := $(K9S_RELEASES)/download/v$(K9S_VERSION)/k9s_$(PLATFORM)_x86_64.tar.gz
 K9S := $(LOCAL_BIN)/$(K9S_BIN_DIR)/k9s
@@ -136,7 +136,7 @@ releases-k9s:
 
 KUBECTL_RELEASES := https://github.com/kubernetes/kubernetes/releases
 # K8S v1.18 is considered stable in October 2020, using latest version available
-KUBECTL_VERSION ?= 1.18.10
+KUBECTL_VERSION ?= 1.21.3
 KUBECTL_BIN = kubectl-$(KUBECTL_VERSION)-$(platform)-amd64
 KUBECTL_URL = https://storage.googleapis.com/kubernetes-release/release/v$(KUBECTL_VERSION)/bin/$(platform)/amd64/kubectl
 KUBECTL = $(LOCAL_BIN)/$(KUBECTL_BIN)
@@ -171,7 +171,7 @@ releases-jq:
 	$(OPEN) $(JQ_RELEASES)
 
 YQ_RELEASES := https://github.com/mikefarah/yq/releases
-YQ_VERSION := 3.4.1
+YQ_VERSION := 4.11.1
 YQ_BIN := yq-$(YQ_VERSION)-$(platform)-amd64
 YQ_URL := $(YQ_RELEASES)/download/$(YQ_VERSION)/yq_$(platform)_amd64
 YQ := $(LOCAL_BIN)/$(YQ_BIN)
@@ -188,7 +188,7 @@ releases-yq:
 	$(OPEN) $(YQ_RELEASES)
 
 HELM_RELEASES := https://github.com/helm/helm/releases
-HELM_VERSION := 3.4.2
+HELM_VERSION := 3.6.3
 HELM_BIN_DIR := helm-v$(HELM_VERSION)-$(platform)-amd64
 HELM_URL := https://get.helm.sh/$(HELM_BIN_DIR).tar.gz
 HELM := $(LOCAL_BIN)/$(HELM_BIN_DIR)/$(platform)-amd64/helm
